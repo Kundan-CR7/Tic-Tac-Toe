@@ -10,7 +10,7 @@ function TicTacToe() {
       <div className="status">
         <p className="text-xl">{getStatusMessage()}</p>
         <button className="reset-btn" onClick={resetGame}>
-          Reset Game
+          Play Again
         </button>
       </div>
       <div className="board">
