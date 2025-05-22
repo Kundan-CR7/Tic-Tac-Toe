@@ -11,14 +11,14 @@ const emojiCategories = {
 };
 
 const useTicTacToe = () => {
-  let [board, setBoard] = useState(initialBoard());
+  const [board, setBoard] = useState(initialBoard());
   const [isXNext, setIsXNext] = useState(true);
   const [player1Category, setPlayer1Category] = useState("Sport");
   const [player2Category, setPlayer2Category] = useState("Nature");
-  let [player1Index, setPlayer1Index] = useState([]);
-  let [player2Index, setPlayer2Index] = useState([]);
+  const [player1Index, setPlayer1Index] = useState([]);
+  const [player2Index, setPlayer2Index] = useState([]);
 
-  const WINNING_PATTERS = [
+  const WINNING_PATTERNS = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -30,8 +30,8 @@ const useTicTacToe = () => {
   ];
 
   const calculateWinner = (currentBoard) => {
-    for (let i = 0; i < WINNING_PATTERS.length; i++) {
-      const [a, b, c] = WINNING_PATTERS[i];
+    for (let i = 0; i < WINNING_PATTERNS.length; i++) {
+      const [a, b, c] = WINNING_PATTERNS[i];
       const cellA = currentBoard[a];
       const cellB = currentBoard[b];
       const cellC = currentBoard[c];
@@ -47,6 +47,7 @@ const useTicTacToe = () => {
     }
     return null;
   };
+
   const getRandomEmoji = (category) => {
     const options = emojiCategories[category];
     return options[Math.floor(Math.random() * options.length)];
@@ -59,39 +60,33 @@ const useTicTacToe = () => {
     const newBoard = [...board];
     const currentPlayer = isXNext ? "Player1" : "Player2";
     const currentCategory = isXNext ? player1Category : player2Category;
+    const currentIndex = isXNext ? player1Index : player2Index;
+    const setCurrentIndex = isXNext ? setPlayer1Index : setPlayer2Index;
 
-    isXNext
-      ? setPlayer1Index((prev) => {
-          const updated = prev.length >= 3 ? prev.slice(1) : [...prev];
-          return [...updated, index];
-        })
-      : setPlayer2Index((prev) => {
-          const updated = prev.length >= 3 ? prev.slice(1) : [...prev];
-          return [...updated, index];
-        });
+    let updatedIndices = [...currentIndex, index];
+    let removedIndex = null;
 
-    const generatedEmoji = getRandomEmoji(currentCategory);
+    if (updatedIndices.length > 3) {
+      removedIndex = updatedIndices.shift();
+      newBoard[removedIndex] = null;
+    }
 
     newBoard[index] = {
-      emoji: generatedEmoji,
+      emoji: getRandomEmoji(currentCategory),
       player: currentPlayer,
     };
 
-    // let retainIndex = [...player1Index, ...player2Index];
-    // let filtered = newBoard.filter((_, index) => {
-    //   return retainIndex.includes(index);
-    // });
-
+    setCurrentIndex(updatedIndices);
     setBoard(newBoard);
     setIsXNext((prev) => !prev);
   };
 
   useEffect(() => {
-    console.log("Player1 updated:", player1Index);
+    console.log("Player1", player1Index);
   }, [player1Index]);
 
   useEffect(() => {
-    console.log("Player2 updated:", player2Index);
+    console.log("Player2", player2Index);
   }, [player2Index]);
 
   const getStatusMessage = () => {
@@ -106,7 +101,7 @@ const useTicTacToe = () => {
   };
 
   const resetGame = () => {
-    setBoard(initialBoard);
+    setBoard(initialBoard());
     setIsXNext(true);
     setPlayer1Index([]);
     setPlayer2Index([]);
@@ -122,4 +117,5 @@ const useTicTacToe = () => {
     resetGame,
   };
 };
+
 export default useTicTacToe;
