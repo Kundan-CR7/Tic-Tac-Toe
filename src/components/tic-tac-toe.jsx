@@ -22,7 +22,7 @@ function TicTacToe() {
               onClick={() => handleClick(index)}
               disabled={b !== null}
             >
-              {b}
+              {b?.emoji || ""}
             </button>
           );
         })}
