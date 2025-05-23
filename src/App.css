@@ -3,6 +3,8 @@
   margin: 0 auto;
   padding: 20px;
   text-align: center;
+  background-color: #b0e63c;
+  border-radius: 5px;
 }
 .status {
   font-size: 20px;
@@ -18,14 +20,62 @@
 .cell {
   width: 150px;
   height: 150px;
-  font-size: 36px;
-  border: 2px solid #cccccc;
+  font-size: 44px;
+  font-weight: bolder;
+  border: 2px solid #816c61;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
-}
-.cell:hover {
-  background-color: #b0e63c;
+  background-color: white;
+  text-shadow: "1px 1px 2px black";
 }
 .reset-btn {
+  height: 40px;
+  width: auto;
   padding: 5px 10px;
+  font-size: 16px;
+}
+.category {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 1rem;
+  margin: 0;
+}
+.temp {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+.title {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 3.75rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(to right, #9ca3af, #c0c0c0, #1f2937);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  background-size: 200% 100%;
+  animation: shimmer 15s infinite linear;
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  50% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

@@ -13,8 +13,8 @@ const emojiCategories = {
 const useTicTacToe = () => {
   const [board, setBoard] = useState(initialBoard());
   const [isXNext, setIsXNext] = useState(true);
-  const [player1Category, setPlayer1Category] = useState("Sport");
-  const [player2Category, setPlayer2Category] = useState("Nature");
+  const [player1Category, setPlayer1Category] = useState("Animal");
+  const [player2Category, setPlayer2Category] = useState("Food");
   const [player1Index, setPlayer1Index] = useState([]);
   const [player2Index, setPlayer2Index] = useState([]);
 
@@ -60,6 +60,7 @@ const useTicTacToe = () => {
     const newBoard = [...board];
     const currentPlayer = isXNext ? "Player1" : "Player2";
     const currentCategory = isXNext ? player1Category : player2Category;
+
     const currentIndex = isXNext ? player1Index : player2Index;
     const setCurrentIndex = isXNext ? setPlayer1Index : setPlayer2Index;
 
@@ -88,6 +89,12 @@ const useTicTacToe = () => {
   useEffect(() => {
     console.log("Player2", player2Index);
   }, [player2Index]);
+  useEffect(() => {
+    console.log("Player1Category", player1Category);
+  }, [player1Category]);
+  useEffect(() => {
+    console.log("Player2Category", player2Category);
+  }, [player2Category]);
 
   const getStatusMessage = () => {
     const winner = calculateWinner(board);
@@ -110,11 +117,14 @@ const useTicTacToe = () => {
   return {
     board,
     player1Category,
+    setPlayer1Category,
     player2Category,
+    setPlayer2Category,
     handleClick,
     calculateWinner,
     getStatusMessage,
     resetGame,
+    emojiCategories,
   };
 };
 
