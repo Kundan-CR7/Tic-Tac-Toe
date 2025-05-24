@@ -101,10 +101,7 @@ const useTicTacToe = () => {
     if (winner) {
       return `${winner} wins`;
     }
-    if (!board.includes(null)) {
-      return `It's a draw!`;
-    }
-    return `Player ${isXNext ? "X" : "O"} turn`;
+    return `Player ${isXNext ? "1" : "2"} turn`;
   };
 
   const resetGame = () => {
@@ -125,6 +122,8 @@ const useTicTacToe = () => {
     getStatusMessage,
     resetGame,
     emojiCategories,
+    player1Index,
+    player2Index,
   };
 };
 
