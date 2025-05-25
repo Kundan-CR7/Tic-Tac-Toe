@@ -26,8 +26,9 @@ function TicTacToe() {
   const buttonText = winner ? "Play Again" : "Reset";
 
   useEffect(() => {
-    if (winner && !showVictory) {
-      console.log("Winner detected, showing victory overlay:", winner);
+    const currentWinner = calculateWinner(board);
+    if (currentWinner && !showVictory) {
+      console.log("Winner detected, showing victory overlay:", currentWinner);
       setShowVictory(true);
       const confettiElements = Array.from({ length: 50 }, (_, i) => ({
         id: i,
@@ -35,17 +36,30 @@ function TicTacToe() {
         animationDelay: `${Math.random() * 3}s`,
       }));
       setConfetti(confettiElements);
+    } else if (!currentWinner && showVictory) {
+      setShowVictory(false);
+      setConfetti([]);
     }
-  }, [winner, showVictory]);
+  }, [board, showVictory, calculateWinner]);
 
   const handlePlayAgain = () => {
-    console.log("Play Again clicked, resetting game...");
-    // Reset all states in a single batch
-    setShowVictory(false);
-    setConfetti([]);
+    console.log("Play Again clicked, starting reset sequence...");
     resetGame();
     setPlayer1Category("Animal");
     setPlayer2Category("Food");
+    setCategoryError("");
+    console.log("Game reset complete");
+  };
+
+  const handleReset = () => {
+    console.log("Reset clicked, starting reset sequence...");
+    setShowVictory(false);
+    setConfetti([]);
+    setCategoryError("");
+    resetGame();
+    setPlayer1Category("Animal");
+    setPlayer2Category("Food");
+    console.log("Game reset complete");
   };
 
   const handleCategorySelect = (player, category) => {
@@ -87,12 +101,11 @@ function TicTacToe() {
               {winner === "Player1" ? "Player 1" : "Player 2"} has won the game!
             </p>
             <button
+              type="button"
               className="start-game-btn"
-              onClick={() => {
-                console.log("Play Again button clicked");
-                handlePlayAgain();
-              }}
+              onClick={handlePlayAgain}
               data-testid="play-again-button"
+              style={{ position: 'relative', zIndex: 1000 }}
             >
               Play Again
             </button>
@@ -188,7 +201,7 @@ function TicTacToe() {
         <div>
           <button
             className="reset-btn"
-            onClick={resetGame}
+            onClick={handleReset}
             aria-label="Reset the game"
           >
             {buttonText}
