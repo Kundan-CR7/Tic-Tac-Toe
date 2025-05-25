@@ -1,13 +1,162 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const initialBoard = () => Array(9).fill(null);
 
 const emojiCategories = {
-  Animal: ["🐶", "🐱", "🐵", "🐰"],
-  Food: ["🍕", "🍟", "🍔", "🍩"],
-  Sport: ["⚽️", "🏀", "🏈", "🎾"],
-  Face: ["😀", "😎", "😡", "🥳"],
-  Nature: ["🌸", "🌞", "🌧️", "🌈"],
+  Animal: [
+    "🐶",
+    "🐱",
+    "🐵",
+    "🐰",
+    "🦒",
+    "🐘",
+    "🐍",
+    "🦋",
+    "🐳",
+    "🦁",
+    "🦊",
+    "🐢",
+  ],
+  Food: [
+    "🍕",
+    "🍟",
+    "🍔",
+    "🍩",
+    "🍣",
+    "🥗",
+    "🍎",
+    "🍦",
+    "🥐",
+    "🍜",
+    "🥭",
+    "🍫",
+  ],
+  Sport: [
+    "⚽️",
+    "🏀",
+    "🏈",
+    "🎾",
+    "🏊‍♂️",
+    "🚴‍♀️",
+    "🏋️‍♂️",
+    "🏄‍♀️",
+    "🥊",
+    "⛸️",
+    "🏹",
+    "🧗‍♂️",
+  ],
+  Face: [
+    "😀",
+    "😎",
+    "😡",
+    "🥳",
+    "😢",
+    "😴",
+    "😍",
+    "😜",
+    "😇",
+    "😣",
+    "🤓",
+    "😬",
+  ],
+  Nature: [
+    "🌸",
+    "🌞",
+    "🌧️",
+    "🌈",
+    "🌲",
+    "🌊",
+    "❄️",
+    "🌋",
+    "🌵",
+    "🌙",
+    "🍂",
+    "🌴",
+  ],
+  Travel: [
+    "✈️",
+    "🚗",
+    "🚂",
+    "🚌",
+    "🚤",
+    "🏍️",
+    "🚁",
+    "🚀",
+    "🛵",
+    "🚲",
+    "🚜",
+    "🛴",
+  ],
+  Objects: [
+    "💻",
+    "📱",
+    "📚",
+    "⌚",
+    "🔦",
+    "🎁",
+    "🖼️",
+    "🛠️",
+    "📷",
+    "🎸",
+    "🧸",
+    "🕰️",
+  ],
+  Symbols: [
+    "❤️",
+    "⭐",
+    "✅",
+    "⚠️",
+    "🔔",
+    "🔒",
+    "💡",
+    "✝️",
+    "☮️",
+    "♻️",
+    "🔥",
+    "💎",
+  ],
+  Weather: [
+    "☀️",
+    "☁️",
+    "⛈️",
+    "🌪️",
+    "🌫️",
+    "🌬️",
+    "☔",
+    "⛄",
+    "🌩️",
+    "🌡️",
+    "🌦️",
+    "⚡",
+  ],
+  Music: [
+    "🎵",
+    "🎶",
+    "🎤",
+    "🎧",
+    "🎸",
+    "🎹",
+    "🥁",
+    "🎺",
+    "🎻",
+    "🪘",
+    "🪗",
+    "🎷",
+  ],
+  Buildings: [
+    "🏠",
+    "🏢",
+    "🏰",
+    "🕌",
+    "⛪",
+    "🏬",
+    "🏭",
+    "🏯",
+    "🏤",
+    "🏡",
+    "🕍",
+    "🏩",
+  ],
 };
 
 const useTicTacToe = () => {
@@ -82,19 +231,17 @@ const useTicTacToe = () => {
     setIsXNext((prev) => !prev);
   };
 
-  useEffect(() => {
-    console.log("Player1", player1Index);
-  }, [player1Index]);
-
-  useEffect(() => {
-    console.log("Player2", player2Index);
-  }, [player2Index]);
-  useEffect(() => {
-    console.log("Player1Category", player1Category);
-  }, [player1Category]);
-  useEffect(() => {
-    console.log("Player2Category", player2Category);
-  }, [player2Category]);
+  const handleCategoryChange = (player, category) => {
+    if (player === "Player1") {
+      if (category !== player2Category) {
+        setPlayer1Category(category);
+      }
+    } else {
+      if (category !== player1Category) {
+        setPlayer2Category(category);
+      }
+    }
+  };
 
   const getStatusMessage = () => {
     const winner = calculateWinner(board);
@@ -105,6 +252,7 @@ const useTicTacToe = () => {
   };
 
   const resetGame = () => {
+    console.log("Resetting game state...");
     setBoard(initialBoard());
     setIsXNext(true);
     setPlayer1Index([]);
@@ -114,9 +262,9 @@ const useTicTacToe = () => {
   return {
     board,
     player1Category,
-    setPlayer1Category,
+    setPlayer1Category: (category) => handleCategoryChange("Player1", category),
     player2Category,
-    setPlayer2Category,
+    setPlayer2Category: (category) => handleCategoryChange("Player2", category),
     handleClick,
     calculateWinner,
     getStatusMessage,
