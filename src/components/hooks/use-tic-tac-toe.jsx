@@ -99,7 +99,7 @@ const useTicTacToe = () => {
   const getStatusMessage = () => {
     const winner = calculateWinner(board);
     if (winner) {
-      return `${winner} wins`;
+      return `🏆 ${winner} wins 🏆`;
     }
     return `Player ${isXNext ? "1" : "2"} turn`;
   };
@@ -124,6 +124,7 @@ const useTicTacToe = () => {
     emojiCategories,
     player1Index,
     player2Index,
+    isXNext,
   };
 };
 
