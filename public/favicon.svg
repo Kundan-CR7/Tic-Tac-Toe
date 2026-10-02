@@ -1,5 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="18" fill="#1f1b16"/>
-  <path d="M16 16 30 30M30 16 16 30" fill="none" stroke="#ff7259" stroke-width="6.5" stroke-linecap="round"/>
-  <circle cx="41.5" cy="41.5" r="8" fill="none" stroke="#7f9eff" stroke-width="6.5"/>
+  <style>
+    .bg { fill: #1f1b16 }
+    .x { stroke: #ff7259 }
+    .o { stroke: #7f9eff }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #f4efe6 }
+      .x { stroke: #dc3f29 }
+      .o { stroke: #2d58d2 }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="18"/>
+  <path class="x" d="M16 16 30 30M30 16 16 30" fill="none" stroke-width="6.5" stroke-linecap="round"/>
+  <circle class="o" cx="41.5" cy="41.5" r="8" fill="none" stroke-width="6.5"/>
 </svg>
