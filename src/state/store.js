@@ -27,8 +27,10 @@ export const DEFAULT_SETTINGS = Object.freeze({
 
 const oneOf = (value, options, fallback) => (options.includes(value) ? value : fallback);
 
-export const cleanName = (value) =>
-  typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, NAME_MAX_LENGTH) : "";
+/** Names are stored as typed, so inputs can hold spaces mid-edit, and tidied for display. */
+export const cleanName = (value) => (typeof value === "string" ? value.slice(0, NAME_MAX_LENGTH) : "");
+
+const tidyName = (value) => value.replace(/\s+/g, " ").trim();
 
 function normalizeSettings(raw = {}) {
   const value = raw && typeof raw === "object" ? raw : {};
@@ -80,12 +82,14 @@ export function matchupKey(settings) {
   return `${against}:${settings.rules}`;
 }
 
+export function defaultName(settings, player) {
+  if (settings.mode === "cpu") return player === COMPUTER ? "Computer" : "You";
+  return `Player ${player}`;
+}
+
 export function displayName(settings, player) {
-  if (settings.mode === "cpu") {
-    if (player === COMPUTER) return "Computer";
-    return settings.names.X || "You";
-  }
-  return settings.names[player] || `Player ${player}`;
+  if (settings.mode === "cpu" && player === COMPUTER) return "Computer";
+  return tidyName(settings.names[player]) || defaultName(settings, player);
 }
 
 export const isComputerTurn = (state, game = selectGame(state)) =>
@@ -183,6 +187,9 @@ export function gameReducer(state, action) {
       return { ...state, round: { ...state.round, moves } };
     }
     case "newRound":
+      // `from` lets a delayed request (after the clearing animation) skip
+      // itself if something else already started a new round.
+      if (action.from !== undefined && action.from !== state.round.id) return state;
       return { ...state, round: freshRound(state) };
     case "updateSettings": {
       const settings = normalizeSettings({

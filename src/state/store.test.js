@@ -152,6 +152,13 @@ describe("rounds and settings", () => {
     expect(starters[2]).toBe(starters[0]);
   });
 
+  it("ignores a delayed new-round request once another round has started", () => {
+    const base = play(createInitialState(), [4]);
+    const changed = settings(base, { mode: "cpu" });
+    expect(gameReducer(changed, { type: "newRound", from: base.round.id })).toBe(changed);
+    expect(gameReducer(changed, { type: "newRound", from: changed.round.id }).round.id).toBe(changed.round.id + 1);
+  });
+
   it("uses the chosen starter", () => {
     const state = settings(createInitialState(), { starter: "O" });
     expect(state.round.starter).toBe("O");
@@ -160,9 +167,10 @@ describe("rounds and settings", () => {
 
   it("starts a new round when game options change but not for names", () => {
     const base = play(createInitialState(), [4, 0]);
-    const renamed = settings(base, { names: { X: "  Ada   Lovelace  " } });
+    const renamed = settings(base, { names: { X: " Ada  Lovelace " } });
     expect(renamed.round).toBe(base.round);
-    expect(renamed.settings.names).toEqual({ X: "Ada Lovelace", O: "" });
+    expect(renamed.settings.names).toEqual({ X: " Ada  Lovelace ", O: "" });
+    expect(displayName(renamed.settings, "X")).toBe("Ada Lovelace");
     for (const patch of [{ mode: "cpu" }, { difficulty: "hard" }, { rules: "vanishing" }, { starter: "O" }]) {
       const next = settings(base, patch);
       expect(next.round.moves).toEqual([]);
@@ -186,7 +194,10 @@ describe("rounds and settings", () => {
     const cpu = settings(local, { mode: "cpu" });
     expect(displayName(cpu.settings, "X")).toBe("You");
     expect(displayName(cpu.settings, "O")).toBe("Computer");
-    const named = settings(cpu, { names: { X: "Ada" } });
+    const named = settings(cpu, { names: { X: "Ada", O: "Grace" } });
     expect(displayName(named.settings, "X")).toBe("Ada");
+    expect(displayName(named.settings, "O")).toBe("Computer");
+    const blank = settings(local, { names: { O: "   " } });
+    expect(displayName(blank.settings, "O")).toBe("Player O");
   });
 });
