@@ -1,0 +1,407 @@
+/* App shell */
+
+.app {
+  --ambient: var(--x-glow);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  transition: --ambient 800ms var(--ease-out);
+}
+
+.app[data-tone="O"] {
+  --ambient: var(--o-glow);
+}
+
+.app[data-tone="win-X"] {
+  --ambient: color-mix(in srgb, var(--x) 22%, transparent);
+}
+
+.app[data-tone="win-O"] {
+  --ambient: color-mix(in srgb, var(--o) 22%, transparent);
+}
+
+.app[data-tone="draw"] {
+  --ambient: color-mix(in srgb, var(--gold) 18%, transparent);
+}
+
+/* A glow tinted by whoever is to move, over a faint dot grid. */
+.app::before,
+.app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.app::before {
+  background: radial-gradient(110% 70% at 50% -12%, var(--ambient), transparent 72%);
+}
+
+.app::after {
+  background-image: radial-gradient(circle, var(--grid-dot) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(90% 65% at 50% 0%, #000 10%, transparent 80%);
+  mask-image: radial-gradient(90% 65% at 50% 0%, #000 10%, transparent 80%);
+}
+
+/* Header */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1;
+}
+
+.brand-logo {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toolbar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-0-5);
+}
+
+.icon-swap {
+  display: grid;
+  animation: icon-swap 480ms var(--ease-spring);
+}
+
+/*
+ * Main layout. The play column fills the height left by the header, and the
+ * board area takes whatever the scoreboard, status and controls leave; the
+ * board is then the largest square that fits (container query units).
+ */
+
+.layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--space-1) var(--space-4) var(--space-5);
+}
+
+.play {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: var(--play-max);
+  max-height: 920px;
+}
+
+.board-area {
+  container-type: size;
+  display: grid;
+  flex: 1 1 0;
+  place-items: center;
+  width: 100%;
+  min-height: 248px;
+}
+
+.board-area > .board-frame {
+  width: var(--board-size, min(100cqw, 100cqh));
+}
+
+.mode-bar {
+  --collapse-gap: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 420px;
+}
+
+.side {
+  display: none;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--border);
+}
+
+.panel-head {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.panel-note {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.panel .segmented-label {
+  gap: 5px;
+  padding-inline: var(--space-1-5);
+}
+
+/* Footer: keyboard hint for devices with a keyboard and mouse. */
+
+.footer {
+  display: none;
+  padding: 0 var(--space-4) var(--space-5);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.footer p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5) var(--space-4);
+}
+
+.footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  box-shadow: inset 0 -1.5px 0 var(--border-strong), 0 0 0 1px var(--border);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footer {
+    display: block;
+  }
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-confetti);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Theme switch: the new theme is revealed as a growing circle (see App.jsx). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Tablets in portrait have room for a bigger board. */
+
+@media (min-width: 700px) and (max-width: 1179px) and (min-height: 960px) {
+  .app {
+    --play-max: 600px;
+  }
+}
+
+/* Desktop: setup | play | history */
+
+@media (min-width: 1180px) {
+  .app {
+    --content-max: 1280px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(272px, 312px) minmax(0, 1fr) minmax(272px, 312px);
+    align-items: stretch;
+    justify-content: normal;
+    column-gap: var(--space-8);
+    padding-top: var(--space-4);
+  }
+
+  .play {
+    justify-self: center;
+  }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .side-right .panel {
+    max-height: calc(100dvh - 120px);
+  }
+}
+
+/* Narrow phones: logo only, and a tighter header. */
+
+@media (max-width: 379px) {
+  .brand-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .topbar {
+    padding-left: var(--space-3);
+  }
+}
+
+/* Short screens: tighten the vertical rhythm so everything fits. */
+
+@media (max-height: 760px) {
+  .play {
+    gap: var(--space-3);
+  }
+
+  .topbar {
+    padding-block: var(--space-2);
+  }
+}
+
+@media (max-height: 700px) {
+  .layout {
+    padding-bottom: var(--space-3);
+  }
+
+  .play .segmented-label {
+    min-height: 36px;
+  }
+
+  .play .segmented-sm .segmented-label {
+    min-height: 30px;
+  }
+
+  .controls .btn {
+    min-height: 46px;
+  }
+
+  .status-pill {
+    min-height: 40px;
+  }
+
+  .status-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Phones in landscape: board on the left, everything else beside it. */
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1179px) {
+  .topbar {
+    padding-block: var(--space-1-5);
+  }
+
+  .layout {
+    padding-top: 0;
+  }
+
+  .play {
+    display: grid;
+    grid-template-columns: auto minmax(0, 360px);
+    grid-template-areas:
+      "board mode"
+      "board score"
+      "board status"
+      "board controls";
+    grid-template-rows: auto auto auto 1fr;
+    align-items: start;
+    justify-content: center;
+    column-gap: var(--space-8);
+    row-gap: var(--space-3);
+    max-width: 960px;
+  }
+
+  .mode-bar {
+    grid-area: mode;
+  }
+
+  .scoreboard {
+    grid-area: score;
+  }
+
+  .status {
+    grid-area: status;
+  }
+
+  .board-area {
+    grid-area: board;
+    container-type: normal;
+    min-height: 0;
+  }
+
+  .board-area > .board-frame {
+    --board-size: max(240px, 100svh - 92px);
+  }
+
+  .controls {
+    grid-area: controls;
+  }
+}
+
+@keyframes icon-swap {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

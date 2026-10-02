@@ -30,4 +30,14 @@ export default [
       ],
     },
   },
+  {
+    files: ['e2e/**/*.js', 'playwright.config.js', 'vite.config.js'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.browser },
+    },
+    rules: {
+      // Playwright fixtures receive a `use` callback that is not a React hook.
+      'react-hooks/rules-of-hooks': 'off',
+    },
+  },
 ]
