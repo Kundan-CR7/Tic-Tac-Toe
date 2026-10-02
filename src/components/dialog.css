@@ -1,0 +1,146 @@
+.dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-width: none;
+  max-height: min(88dvh, 860px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+  overflow: hidden;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: dialog-in var(--duration-slow) var(--ease-out);
+}
+
+/* Literal colours: older engines do not inherit custom properties into ::backdrop. */
+.dialog::backdrop {
+  background: rgb(31 27 22 / 0.42);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: backdrop-in var(--duration-base) var(--ease-out);
+}
+
+[data-theme="dark"] .dialog::backdrop {
+  background: rgb(0 0 0 / 0.62);
+}
+
+.dialog[data-closing] {
+  animation: dialog-out 180ms var(--ease-in) forwards;
+}
+
+.dialog[data-closing]::backdrop {
+  animation: backdrop-out 180ms var(--ease-in) forwards;
+}
+
+.dialog-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.dialog-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.dialog-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5) var(--space-6) var(--space-6);
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* Phones: a bottom sheet within thumb reach. */
+@media (max-width: 640px) {
+  .dialog {
+    width: 100%;
+    max-height: calc(100dvh - max(24px, env(safe-area-inset-top)));
+    margin: auto 0 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .dialog[open] {
+    animation-name: sheet-in;
+  }
+
+  .dialog[data-closing] {
+    animation-name: sheet-out;
+  }
+
+  .dialog-header {
+    padding-left: var(--space-5);
+  }
+
+  .dialog-body {
+    padding: var(--space-5) var(--space-5) max(var(--space-6), env(safe-area-inset-bottom));
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes backdrop-out {
+  to {
+    opacity: 0;
+  }
+}

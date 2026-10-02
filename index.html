@@ -1,15 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#161311" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Tic Tac Toe · Play a friend or the computer</title>
+    <meta
+      name="description"
+      content="A beautifully crafted Tic Tac Toe. Play a friend on one device or take on the computer at three levels, with light and dark themes, sound, match history and full keyboard support."
+    />
+    <meta name="theme-color" content="#f6f3ec" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="Tic Tac Toe" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tic Tac Toe" />
+    <meta
+      property="og:description"
+      content="Play a friend or the computer in a beautifully crafted Tic Tac Toe."
+    />
+    <link rel="preload" href="/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/fraunces-latin-700.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Emoji Clash</title>
+    <script>
+      // Apply the saved theme and motion preference before first paint.
+      // Mirrors src/state/preferences.js.
+      (function () {
+        var theme = "light";
+        var motion = "full";
+        try {
+          var prefs = JSON.parse(localStorage.getItem("ttt:prefs:v1") || "{}") || {};
+          var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          theme = prefs.theme === "light" || prefs.theme === "dark" ? prefs.theme : dark ? "dark" : "light";
+          motion = prefs.motion === "reduce" || (prefs.motion !== "full" && reduce) ? "reduce" : "full";
+        } catch (error) {}
+        var root = document.documentElement;
+        root.setAttribute("data-theme", theme);
+        root.setAttribute("data-motion", motion);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#12110f" : "#f6f3ec");
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>Tic Tac Toe needs JavaScript to run.</noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
