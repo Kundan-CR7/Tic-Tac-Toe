@@ -96,6 +96,8 @@
   --tile: #f3eee5;
   --border: rgb(31 27 22 / 0.1);
   --border-strong: rgb(31 27 22 / 0.2);
+  /* Boundaries that identify form controls need 3:1 against their surface. */
+  --control-border: #8b8378;
 
   --text: #1f1b16;
   --text-muted: #5b544a;
@@ -140,6 +142,7 @@
   --tile: #27241f;
   --border: rgb(244 239 230 / 0.09);
   --border-strong: rgb(244 239 230 / 0.18);
+  --control-border: #7a7268;
 
   --text: #f4efe6;
   --text-muted: #b5ada1;

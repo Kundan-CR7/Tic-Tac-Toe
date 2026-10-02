@@ -396,31 +396,35 @@ svg {
   padding: 0;
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--surface-3);
-  box-shadow: inset 0 0 0 1px var(--border-strong);
-  transition: background-color var(--duration-base) var(--ease-out);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 2px var(--control-border);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
 
 .switch::before {
   content: "";
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 24px;
-  height: 24px;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
   border-radius: var(--radius-full);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
-  transition: transform var(--duration-slow) var(--ease-spring);
+  background: var(--control-border);
+  transition:
+    transform var(--duration-slow) var(--ease-spring),
+    background-color var(--duration-base) var(--ease-out);
 }
 
 .switch[aria-checked="true"] {
   background: var(--text);
+  box-shadow: inset 0 0 0 2px var(--text);
 }
 
 .switch[aria-checked="true"]::before {
-  transform: translateX(20px);
+  transform: translateX(20px) scale(1.5);
   background: var(--text-on-strong);
 }
 
@@ -430,7 +434,7 @@ svg {
   width: 100%;
   min-height: 48px;
   padding: 0 var(--space-4);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--control-border);
   border-radius: var(--radius-md);
   background: var(--surface);
   color: var(--text);
